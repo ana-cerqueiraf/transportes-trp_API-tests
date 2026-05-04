@@ -17,8 +17,7 @@ const getAuthToken = async () => {
   };
 
   const requestBody = new URLSearchParams(credentials).toString();
-
-  // ... (resto do seu código acima do try)
+  
   try {
     const response = await request(baseUrl)
       .post('/auth/realms/brhml/protocol/openid-connect/token')
@@ -33,9 +32,8 @@ const getAuthToken = async () => {
     return response.body.access_token;
 
   } catch (error) {
-    // Registramos o erro, mas agora usamos THROW em vez de matar o processo
     console.error('Erro fatal durante a tentativa de autenticação como interno:', error.message);
-    throw error; // <--- AJUSTE CRUCIAL AQUI
+    throw error;
   }
 };
 

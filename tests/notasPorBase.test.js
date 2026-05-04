@@ -14,11 +14,8 @@ describe('Consultar Quantitativo de Entregas por Base', () => {
       .get(`/transportadores/${process.env.TEST_USERNAME}/bases?dataInicial=2026-04-01&dataFinal=2026-04-30`)
       .set('Authorization', `Bearer ${token}`);
 
-    // 1. Chama a função helper para fazer as validações comuns
     validaRespostaSucesso(response);
     validaSchemaBases(response);
-
-    // 2. Faz apenas a asserção que é específica para ESTE caso de teste
     expect(response.body.length).toBe(1);
   });
 
@@ -27,13 +24,10 @@ describe('Consultar Quantitativo de Entregas por Base', () => {
       .get(`/transportadores/${process.env.TEST_USERNAME}/bases?dataInicial=2024-04-03&dataFinal=2026-04-30`)
       .set('Authorization', `Bearer ${token}`);
 
-    // 1. Reutiliza a mesma função helper
     validaRespostaSucesso(response);
     validaSchemaBases(response);
 
-    // 2. Faz apenas a asserção específica deste cenário
     expect(response.body.length).toBeGreaterThan(1);
-    // Dica: .toBeGreaterThan(1) é um pouco mais legível que .toBe(true) para esta verificação
   });
 
   it('deve consultar o quantitativo de entregas com sucesso sem enviar datas (default 15 dias)', async () => {
@@ -41,7 +35,6 @@ describe('Consultar Quantitativo de Entregas por Base', () => {
       .get(`/transportadores/${process.env.TEST_USERNAME}/bases`)
       .set('Authorization', `Bearer ${token}`);
 
-    // 1. Reutiliza a mesma função helper
     validaRespostaSucesso(response);
     validaSchemaBases(response);
   });

@@ -3,11 +3,6 @@ const ajv = new Ajv(); // Inicializa o validador
 const { notasPorBaseSchema } = require('./schemas/qtdNotasPorBase.schema.js');
 const { detalheEntregasSchema } = require('./schemas/detalheEntregasPorBase.schema.js');
 
-/**
- * Valida a resposta geral de sucesso da API de consulta de entregas.
- * Verifica o status e o tipo da resposta, e valida cada objeto no array.
- * @param {object} response - O objeto de resposta do Supertest.
- */
 function validaRespostaSucesso(response) {
   // 1. Validações gerais da resposta
   expect(response.status).toBe(200);
