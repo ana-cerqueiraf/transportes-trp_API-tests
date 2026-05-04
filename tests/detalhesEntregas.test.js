@@ -21,7 +21,7 @@ describe('Consultar Detalhes das Entregas por Base', () => {
 
   it('deve consultar os detalhes das entregas ENTREGUES com sucesso', async () => {
     const response = await request(process.env.BASE_URL)
-      .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?statusNota=ENTREGUE`)
+      .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?dataInicial=2024-01-01&dataFinal=2026-06-30&statusNota=ENTREGUE`)
       .set('Authorization', `Bearer ${token}`);
 
     // 1. Chama a função helper para fazer as validações comuns
