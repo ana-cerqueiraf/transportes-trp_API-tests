@@ -2,11 +2,6 @@
 # Dependências do Node.js
 # =========================
 node_modules/
-package-lock.json
-# (Opcional) Ignore o package-lock.json SE o seu time não usa ou prefere usar apenas yarn/pnpm. 
-# Caso contrário, mantenha-o no repositório. O padrão é enviar o lockfile.
-# Se quiser enviar (recomendado), remova a linha "package-lock.json" acima.
-
 # =========================
 # Arquivos de Ambiente (Segredos)
 # =========================
