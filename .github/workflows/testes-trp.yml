@@ -1,4 +1,4 @@
-name: Execução de Testes do BFF - TRP (HML)
+name: Execução de Testes de API
 
 on:
   push:
@@ -10,7 +10,6 @@ jobs:
   testes:
     runs-on: ubuntu-latest
     environment: hml-trp 
-    # ========================
 
     steps:
     - name: Fazer Checkout do Código
@@ -38,3 +37,21 @@ jobs:
         USER_INTERNO: ${{ secrets.USER_INTERNO }}
         USER_INTERNO_INVALIDO: ${{ secrets.USER_INTERNO_INVALIDO }}
         PASS_INTERNO: ${{ secrets.PASS_INTERNO }}
+
+    - name: Gerar Site do Allure Report
+      uses: simple-elf/allure-report-action@master
+      if: always() 
+      with:
+        allure_results: allure-results
+        gh_pages: gh-pages
+        allure_report: allure-report
+        allure_history: allure-history
+        keep_reports: 5
+
+    - name: Publicar no GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: always() # Roda mesmo se os testes falharem
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: allure-history
