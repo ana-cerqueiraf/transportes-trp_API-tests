@@ -82,6 +82,24 @@ describe('Consultar Detalhes das Entregas por Base', () => {
     });
   });
 
+  it('deve buscar nota fiscal por número com sucesso', async () => {
+    let numeroNota = '3679733';
+    const response = await request(process.env.BASE_URL)
+      .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?numeroNota=${numeroNota}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    validaRespostaSucesso(response);
+    response.body.forEach(programacao => {
+      programacao.entregas.forEach(entrega => {
+        entrega.itens.forEach(item => {
+          expect(item.notaFiscal).toBe(numeroNota);
+        });
+      });
+    expect(response.body.length).toBe(1);
+    //validaSchemaEntregasPorBase(response);
+    });
+  });
+
   it('não deve consultar os detalhes das entregas ao utilizar token expirado', async () => {
     const response = await request(process.env.BASE_URL)
       .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas`)
