@@ -1,0 +1,40 @@
+name: Execução de Testes do BFF - TRP (HML)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    environment: hml-trp 
+    # ========================
+
+    steps:
+    - name: Fazer Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Instalar Dependências
+      run: npm ci
+
+    - name: Executar Testes com Jest
+      run: npm test
+      env:
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        SSO_URL: ${{ secrets.SSO_URL }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+        TOKEN_EXPIRADO: ${{ secrets.TOKEN_EXPIRADO }}
+        USER_INTERNO: ${{ secrets.USER_INTERNO }}
+        USER_INTERNO_INVALIDO: ${{ secrets.USER_INTERNO_INVALIDO }}
+        PASS_INTERNO: ${{ secrets.PASS_INTERNO }}
