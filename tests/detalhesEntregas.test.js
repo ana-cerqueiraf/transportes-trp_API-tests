@@ -14,9 +14,24 @@ describe('Consultar Detalhes das Entregas por Base', () => {
       .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas`)
       .set('Authorization', `Bearer ${token}`);
 
-    // 1. Chama a função helper para fazer as validações comuns
     validaRespostaSucesso(response);
     //validaSchemaEntregasPorBase(response);
+  });
+
+  it('deve consultar os detalhes das entregas com sucesso passando período de 15 dias', async () => {
+    const response = await request(process.env.BASE_URL)
+      .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?periodo=15`)
+      .set('Authorization', `Bearer ${token}`);
+
+    validaRespostaSucesso(response);
+
+    response.body.forEach(programacao => {
+      programacao.entregas.forEach(entrega => {
+        entrega.itens.forEach(item => {
+          expect(item.notaFiscal).not.toBe('3679733'); //garante que a nota com data fora dos 15 dias enviados no parâmetro não é retornada
+        });
+      });
+    });
   });
 
   it('deve consultar os detalhes das entregas ENTREGUES com sucesso', async () => {
@@ -24,10 +39,47 @@ describe('Consultar Detalhes das Entregas por Base', () => {
       .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?dataInicial=2024-01-01&dataFinal=2026-06-30&statusNota=ENTREGUE`)
       .set('Authorization', `Bearer ${token}`);
 
-    // 1. Chama a função helper para fazer as validações comuns
     validaRespostaSucesso(response);
+    response.body.forEach(programacao => {
+      programacao.entregas.forEach(entrega => {
+        entrega.itens.forEach(item => {
+          expect(item.statusRegistroItem).toBe('ENTREGUE');
+        });
+      });
     //validaSchemaEntregasPorBase(response);
-    expect(response.body[0].entregas[0].itens[0].statusRegistroItem).toBe('ENTREGUE');
+    });
+  });
+
+  it('deve consultar os detalhes das entregas NÃO ENTREGUES com sucesso', async () => {
+    const response = await request(process.env.BASE_URL)
+      .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?dataInicial=2024-01-01&dataFinal=2026-06-30&statusNota=NAO_ENTREGUE`)
+      .set('Authorization', `Bearer ${token}`);
+
+    validaRespostaSucesso(response);
+    response.body.forEach(programacao => {
+      programacao.entregas.forEach(entrega => {
+        entrega.itens.forEach(item => {
+          expect(item.statusRegistroItem).toBe('NAO_ENTREGUE');
+        });
+      });
+    //validaSchemaEntregasPorBase(response);
+    });
+  });
+
+  it('deve consultar os detalhes das entregas SEM REGISTRO com sucesso', async () => {
+    const response = await request(process.env.BASE_URL)
+      .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?dataInicial=2024-01-01&dataFinal=2026-06-30&statusNota=SEM_REGISTRO`)
+      .set('Authorization', `Bearer ${token}`);
+
+    validaRespostaSucesso(response);
+    response.body.forEach(programacao => {
+      programacao.entregas.forEach(entrega => {
+        entrega.itens.forEach(item => {
+          expect(item.statusRegistroItem).toBe('SEM_REGISTRO');
+        });
+      });
+    //validaSchemaEntregasPorBase(response);
+    });
   });
 
   it('não deve consultar os detalhes das entregas ao utilizar token expirado', async () => {

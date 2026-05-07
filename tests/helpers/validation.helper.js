@@ -3,19 +3,25 @@ const ajv = new Ajv(); // Inicializa o validador
 const { notasPorBaseSchema } = require('./schemas/qtdNotasPorBase.schema.js');
 const { detalheEntregasSchema } = require('./schemas/detalheEntregasPorBase.schema.js');
 
-function validaRespostaSucesso(response) {
+exports.validaRespostaSucesso = (response) => {
   // 1. Validações gerais da resposta
   expect(response.status).toBe(200);
   expect(response.body).toBeInstanceOf(Array);
 };
 
-function validaRespostaUnauthorized(response) {
+exports.validaRespostaUnauthorized = (response) => {
   expect(response.status).toBe(401);
   expect(response.body).toBeInstanceOf(Object);
   expect(response.body.message).toBe('Unauthorized');
 };
 
-function validaSchemaBases(response) {
+exports.validaRespostaForbidden = (response) => {
+  expect(response.status).toBe(403);
+  expect(response.body).toBeInstanceOf(Object);
+  expect(response.body.detail).toBe('Forbidden');
+};
+
+exports.validaSchemaBases = (response) => {
     const schemaValido = ajv.validate(notasPorBaseSchema, response.body);
 
     if (!schemaValido) {
@@ -24,7 +30,7 @@ function validaSchemaBases(response) {
     expect(schemaValido).toBe(true);
 };
 
-function validaSchemaEntregasPorBase(response) {
+exports.validaSchemaEntregasPorBase = (response) => {
     const schemaValido = ajv.validate(detalheEntregasSchema, response.body);
 
     if (!schemaValido) {
@@ -32,6 +38,3 @@ function validaSchemaEntregasPorBase(response) {
     }
     expect(schemaValido).toBe(true);
 };
-
-// Exporta a função para que possa ser usada em outros arquivos
-module.exports = {validaRespostaSucesso, validaRespostaUnauthorized, validaSchemaBases, validaSchemaEntregasPorBase};
