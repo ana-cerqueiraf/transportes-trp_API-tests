@@ -45,4 +45,23 @@ describe('Simulação com usuario interno', () => {
         validaRespostaSucesso(response);
     });
 
+    it('pesquisar por número da nota fiscal na simulacao', async () => {
+        let numeroNota = '3679735';
+        const response = await request(process.env.BASE_URL)
+            .get(`/transportadores/${process.env.TEST_USERNAME}/bases/5080/entregas?numeroNota=${numeroNota}`)
+            .set('chaveVibra', `${process.env.USER_INTERNO}`)
+            .set('Authorization', `Bearer ${token}`);
+
+        validaRespostaSucesso(response);
+        response.body.forEach(programacao => {
+            programacao.entregas.forEach(entrega => {
+                entrega.itens.forEach(item => {
+                    expect(item.notaFiscal).toBe(numeroNota);
+                });
+            });
+            expect(response.body.length).toBe(1);
+        });
+
+    });
+
 });
