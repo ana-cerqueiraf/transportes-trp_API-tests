@@ -4,7 +4,7 @@ const request = require('supertest');
 
 let token;
 
-describe('Consultar Detalhes das Entregas por Base', () => {
+describe('GET /{cnpj}/bases/{baseId}/entregas | Consultar Detalhes das Entregas por Base', () => {
   beforeAll(async () => {
     token = await getAuthToken();
   });

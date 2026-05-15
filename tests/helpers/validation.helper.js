@@ -1,5 +1,6 @@
 const Ajv = require('ajv'); // Biblioteca para validação de JSON Schema
 const ajv = new Ajv(); // Inicializa o validador
+const { dadosTransportadorSchema } = require('./schemas/dadosTransportador.schema.js');
 const { notasPorBaseSchema } = require('./schemas/qtdNotasPorBase.schema.js');
 const { detalheEntregasSchema } = require('./schemas/detalheEntregasPorBase.schema.js');
 
@@ -32,6 +33,15 @@ exports.validaSchemaBases = (response) => {
 
 exports.validaSchemaEntregasPorBase = (response) => {
     const schemaValido = ajv.validate(detalheEntregasSchema, response.body);
+
+    if (!schemaValido) {
+      console.error('Erros de validação do Schema:', ajv.errors);
+    }
+    expect(schemaValido).toBe(true);
+};
+
+exports.validaSchemaTransportador = (response) => {
+    const schemaValido = ajv.validate(dadosTransportadorSchema, response.body);
 
     if (!schemaValido) {
       console.error('Erros de validação do Schema:', ajv.errors);

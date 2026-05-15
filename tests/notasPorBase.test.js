@@ -4,7 +4,7 @@ const request = require('supertest');
 
 let token;
 
-describe('Consultar Quantitativo de Entregas por Base', () => {
+describe('GET /{cnpj}/bases| Consultar Quantitativo de Notas por Base', () => {
   beforeAll(async () => {
     token = await getAuthToken();
   });

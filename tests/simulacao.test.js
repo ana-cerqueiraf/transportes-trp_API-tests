@@ -1,10 +1,10 @@
-const { getAuthTokenSimulacao } = require('./helpers/authSimulacao.helper.js');
+const { getAuthTokenSimulacao } = require('./helpers/auth.helper.js');
 const { validaRespostaSucesso, validaRespostaForbidden, validaRespostaUnauthorized } = require('./helpers/validation.helper.js');
 const request = require('supertest');
 
 let token;
 
-describe('Simulação com usuario interno', () => {
+describe('GET (Chamadas com Token e Header de usuário interno) | Chamadas de Simulação com usuario interno', () => {
     beforeAll(async () => {
         token = await getAuthTokenSimulacao();
     });
