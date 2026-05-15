@@ -37,6 +37,7 @@ jobs:
         USER_INTERNO: ${{ secrets.USER_INTERNO }}
         USER_INTERNO_INVALIDO: ${{ secrets.USER_INTERNO_INVALIDO }}
         PASS_INTERNO: ${{ secrets.PASS_INTERNO }}
+        CPF: ${{ secrets.CPF }}
 
     - name: Gerar Site do Allure Report
       uses: simple-elf/allure-report-action@master
